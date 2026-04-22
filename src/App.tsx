@@ -1,6 +1,14 @@
-import { useState } from 'react'
+import { useState, ChangeEvent } from 'react'
 
-const noteTypes = [
+type NoteType = 'link' | 'text' | 'task'
+
+type NoteItem = {
+  id: string
+  text: string
+  type: NoteType
+}
+
+const noteTypes: Array<{ id: NoteType; label: string }> = [
   { id: 'link', label: 'Link' },
   { id: 'text', label: 'Text' },
   { id: 'task', label: 'Task' }
@@ -8,8 +16,9 @@ const noteTypes = [
 
 function App() {
   const [noteText, setNoteText] = useState('')
-  const [noteType, setNoteType] = useState('link')
-  const [notes, setNotes] = useState([])
+  const [noteType, setNoteType] = useState<NoteType>('link')
+  const [notes, setNotes] = useState<NoteItem[]>([])
+  const [savedNotes, saveNotes] = useState<NoteItem[]>([])
 
   const addNote = () => {
     if (!noteText.trim()) return
@@ -25,9 +34,25 @@ function App() {
 
     setNoteText('')
   }
-
-  const deleteNote = (id) => {
+  
+  const deleteNote = (id: string) => {
     setNotes((current) => current.filter((note) => note.id !== id))
+  }
+
+  const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setNoteText(event.target.value)
+  }
+
+  const saveNote = () => {
+    if (!noteText.trim()) return
+
+    //notes.forEach((note) => {
+    //  if (!savedNotes.some((saved) => saved.id === note.id)) {
+    //    saveNotes((current) => [...current, note])
+    //  }
+    //})
+
+    setNoteText('')
   }
 
   return (
@@ -40,7 +65,7 @@ function App() {
             type="text"
             placeholder="Enter a new note"
             value={noteText}
-            onChange={(event) => setNoteText(event.target.value)}
+            onChange={handleTextChange}
           />
 
           <div className="type-row">
@@ -61,11 +86,16 @@ function App() {
           <button className="add-button" onClick={addNote} disabled={!noteText.trim()}>
             Add note
           </button>
+
+          <button className="add-button" onClick={saveNote} disabled={!notes.length}>
+            Save notes of the day
+          </button>
+
         </div>
 
         <div className="notes-list">
           {notes.length === 0 ? (
-            <p>No notes yet. Add one to see it appear here.</p>
+            <p>...</p>
           ) : (
             notes.map((note) => (
               <article className="note-item" key={note.id}>
