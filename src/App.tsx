@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useEffect } from 'react'
 
 type NoteType = 'link' | 'text' | 'task'
 
@@ -18,7 +18,15 @@ function App() {
   const [noteText, setNoteText] = useState('')
   const [noteType, setNoteType] = useState<NoteType>('link')
   const [notes, setNotes] = useState<NoteItem[]>([])
-  const [savedNotes, saveNotes] = useState<NoteItem[]>([])
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    // Load notes from server on component mount
+    fetch('http://localhost:8000/notes')
+      .then(response => response.json())
+      .then(data => setNotes(data))
+      .catch(error => console.error('Failed to load notes:', error))
+  }, [])
 
   const addNote = () => {
     if (!noteText.trim()) return
@@ -43,16 +51,30 @@ function App() {
     setNoteText(event.target.value)
   }
 
-  const saveNote = () => {
-    if (!noteText.trim()) return
+  const saveNotes = async () => {
+    if (notes.length === 0) return
 
-    //notes.forEach((note) => {
-    //  if (!savedNotes.some((saved) => saved.id === note.id)) {
-    //    saveNotes((current) => [...current, note])
-    //  }
-    //})
+    setIsSaving(true)
+    try {
+      const response = await fetch('http://localhost:8000/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(notes),
+      })
 
-    setNoteText('')
+      if (response.ok) {
+        alert('Notes saved successfully!')
+      } else {
+        throw new Error('Failed to save notes')
+      }
+    } catch (error) {
+      console.error('Error saving notes:', error)
+      alert('Failed to save notes. Make sure the Deno server is running.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -87,15 +109,15 @@ function App() {
             Add note
           </button>
 
-          <button className="add-button" onClick={saveNote} disabled={!notes.length}>
-            Save notes of the day
+          <button className="add-button" onClick={saveNotes} disabled={!notes.length || isSaving}>
+            {isSaving ? 'Saving...' : 'Save notes'}
           </button>
 
         </div>
 
         <div className="notes-list">
           {notes.length === 0 ? (
-            <p>...</p>
+            <p>No notes to display.</p> 
           ) : (
             notes.map((note) => (
               <article className="note-item" key={note.id}>

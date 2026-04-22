@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "deno run --allow-net --allow-read --allow-write server.ts"
   },
   "dependencies": {
     "react": "^18.3.1",
