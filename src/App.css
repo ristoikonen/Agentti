@@ -1,0 +1,120 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f7fb;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.app-card {
+  width: min(760px, 100%);
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(29, 34, 60, 0.08);
+  padding: 2rem;
+}
+
+.app-title {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  line-height: 1.1;
+  color: #111827;
+}
+
+.notes-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.notes-form textarea,
+.notes-form input[type="text"] {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid #d2d6dc;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.type-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.type-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.add-button {
+  width: fit-content;
+  padding: 0.9rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.notes-list {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.note-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.note-details {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.note-type {
+  font-size: 0.82rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.note-text {
+  margin: 0;
+  color: #111827;
+}
+
+.delete-button {
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  cursor: pointer;
+  font-weight: 700;
+}
